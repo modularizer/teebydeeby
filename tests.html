@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TbDb</title>
+<!--    <link rel="stylesheet" href="css/style.css">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+    <script src="../teebydeeby.js"></script>
+</head>
+<body>
+    <h1>1. headers list JSON, data list of lists JSON</h1>
+    <teeby-deeby
+        headers='["a", "b", "c"]'
+        data='[["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]'
+    ></teeby-deeby>
+
+    <hr/>
+    <h1>2. data list</h1>
+    <teeby-deeby
+        data='[{"d": "20", "e": 33}, {"d": "40", "e": 55}, {"d": "70", "e": 88}]'
+    ></teeby-deeby>
+
+    <hr/>
+    <h1>3. markdown</h1>
+<teeby-deeby
+        md="| Name        | Occupation            | Age |
+|-------------|-----------------------|-----|
+| John Doe    | Developer, Frontend   | 30  |
+| Jane Smith  | Graphic Designer      | 28  |
+| Bob \\\| Builder | Construction Worker | 45  |"
+    ></teeby-deeby>
+
+    <hr/>
+    <h1>4. csv</h1>
+    <teeby-deeby
+        csv="Name,Occupation,Age
+John Doe,Developer,30
+Jane Smith,Graphic Designer,28
+Bob | Builder,Construction Worker,45"
+    ></teeby-deeby>
+
+    <h1>5. lz csv</h1>
+    <teeby-deeby csv="IYGgRiDGBQCMICYQGZoBYQFYQDZoHYQAOEATmiA"></teeby-deeby>
+
+    <h1>6. lz csv innerHTML</h1>
+    <teeby-deeby>IYGgRiDGBQCMICYQGZoBYQFYQDZoHYQAOEATmiA</teeby-deeby>
+
+    <h1>7. innerHTML markdown</h1>
+    <teeby-deeby>| Name        | Occupation            | Age |
+|-------------|-----------------------|-----|
+| John Doe    | Developer, Frontend   | 30  |
+| Jane Smith  | Graphic Designer      | 28  |
+| Bob \\\| Builder | Construction Worker | 45  |</teeby-deeby>
+
+    <h1>8. innerHTML csv</h1>
+    <teeby-deeby>Name,Occupation,Age
+John Doe,Developer,30
+Jane Smith,Graphic Designer,28
+Bob | Builder,Construction Worker,45</teeby-deeby>
+
+    <h1>9. table</h1>
+    <teeby-deeby>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Occupation</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>Developer, Frontend</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>Jane Smith</td>
+                    <td>Graphic Designer</td>
+                    <td>28</td>
+                </tr>
+                <tr>
+                    <td>Bob | Builder</td>
+                    <td>Construction Worker</td>
+                    <td>45</td>
+                </tr>
+            </tbody>
+        </table>
+    </teeby-deeby>
+
+
+    <h1>10. table #2</h1>
+    <teeby-deeby>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Occupation</th>
+                <th>Age</th>
+            </tr>
+            <tr>
+                <td>John Doe</td>
+                <td>Developer, Frontend</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>Jane Smith</td>
+                <td>Graphic Designer</td>
+                <td>28</td>
+            </tr>
+            <tr>
+                <td>Bob | Builder</td>
+                <td>Construction Worker</td>
+                <td>45</td>
+            </tr>
+        </table>
+    </teeby-deeby>
+
+
+</body>
+</html>
