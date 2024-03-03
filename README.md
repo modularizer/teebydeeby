@@ -1,6 +1,9 @@
 # TeebyDeeby
 A front-end renderer of many different sources of tabular data.
 
+### Weird Name?
+Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
+
 ## Usage
 
 ### iframe / URL usage
