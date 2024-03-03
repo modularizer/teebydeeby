@@ -1,4 +1,4 @@
-/* basics */
+
 teeby-deeby {
     -webkit-border-horizontal-spacing: 0px;
     -webkit-border-vertical-spacing: 0px;
@@ -52,7 +52,6 @@ teeby-deeby {
         th:hover {
             filter: brightness(110%);
         }
-        /* now change the brightness of the nth-child  in each row */
         tbody {
             brightness: 95%;
         }
@@ -60,9 +59,26 @@ teeby-deeby {
     td:hover {
         filter: brightness(120%);
     }
+
+    tfoot {
+        td {
+            padding: 6px;
+            font-size: 0.75em;
+            border: none;
+        }
+    }
+
+    tfoot {
+        display: none;
+    }
 }
 
-/* width levels */
+teeby-deeby.footer {
+    tfoot {
+        display: table-row-group;
+    }
+}
+
 teeby-deeby.wide {
     table {
         width: 100%;
@@ -85,7 +101,6 @@ teeby-deeby.quarter {
     }
 }
 
-/* height levels */
 teeby-deeby.scroll {
     table {
         table-layout: fixed;
@@ -105,7 +120,6 @@ teeby-deeby.h50 {
     }
 }
 
-/* padding levels */
 teeby-deeby.p16 {
     th, td {
         padding: 16px;
@@ -132,7 +146,6 @@ teeby-deeby.p2 {
     }
 }
 
-/* boder radius levels */
 teeby-deeby.round {
     table {
         border-radius: 5px;
@@ -156,7 +169,6 @@ teeby-deeby.square {
 }
 
 
-/* gap levels */
 teeby-deeby.zero {
     -webkit-border-horizontal-spacing: 0px;
     -webkit-border-vertical-spacing: 0px;
@@ -193,7 +205,7 @@ teeby-deeby.gap2 {
     }
 }
 
-/* color schemes */
+
 @media (prefers-color-scheme: dark) {
     table {
         background-color: black;
@@ -278,7 +290,6 @@ teeby-deeby.orange {
 }
 teeby-deeby.rainbow {
 
-    /* use tr:nth-child to alternate through rainbow colors */
     th {
         background-color: black;
     }
@@ -308,15 +319,8 @@ teeby-deeby.rainbow {
     tr:nth-child(7n+7){
         background-color: violet;
     }
-
-
 }
 
-
-
-
-
-/* dark mode colors */
 teeby-deeby.dblue {
     table {
         background-color: black;

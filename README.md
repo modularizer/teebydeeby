@@ -24,7 +24,8 @@ A front-end renderer of many different sources of tabular data.
 
 
 ## Development Plan
-- [ ] single minified distribution file
+- [x] single minified distribution file
+  - NOTE: does not iclude lz-string, so you'll need to include that in your project if you want to use lz compressed strings
 - [x] Render tables from a variety of pre-loaded data sources
   - [x] JSON (many formats)
   - [x] CSV
@@ -37,7 +38,8 @@ A front-end renderer of many different sources of tabular data.
   - [x] attributes
   - [x] innerHTML
   - [x] url
-  - [x] lz compressed string
+  - [x] lz compressed string 
+    * NOTE: requires `lz-string` package from `<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>`
   - [x] base64 encoded string
   - [ ] file upload
   - [ ] drag and drop

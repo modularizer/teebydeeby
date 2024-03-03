@@ -75,6 +75,7 @@ class TeebyDeeby extends HTMLElement {
         this.table = this.querySelector('table');
         this.thead = this.table.createTHead();
         this.tbody = this.table.createTBody();
+        this.tfoot = this.table.createTFoot();
     }
 
     onload(){
@@ -247,7 +248,20 @@ class TeebyDeeby extends HTMLElement {
                 this._onHeaderEdit(th.cellIndex, e.target.innerHTML);
             })
         }
-        this.thead.appendChild(th);
+        if (index === this._headers.length - 1){
+            this.thead.appendChild(th);
+        }else{
+            this.thead.insertBefore(th, this.thead.children[index]);
+        }
+
+        // add empty cell to footer
+        let tf = document.createElement('td');
+        tf.innerHTML = '';
+        if (index === this._headers.length - 1){
+            this.tfoot.appendChild(tf);
+        }else{
+            this.tfoot.insertBefore(tf, this.tfoot.children[index]);
+        }
 
 
         // modify any old headers of `#index`

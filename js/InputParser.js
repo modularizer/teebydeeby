@@ -1,3 +1,5 @@
+window.dlz = LZString?LZString.decompressFromEncodedURIComponent:()=>{console.error('LZString not found. add <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> to your html');return ''};
+
 class InputParser {
     constructor(defaultFromDictMode = 'horizontal') {
         this.parse = this.parse.bind(this);
@@ -59,7 +61,7 @@ class InputParser {
         if (!this.testString(data)) {
             let newdata;
             try {
-                newdata = LZString.decompressFromEncodedURIComponent(data);
+                newdata = dlz(data);
                 if (this.testString(newdata)) {
                     return newdata;
                 }
