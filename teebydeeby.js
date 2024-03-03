@@ -25,7 +25,13 @@ class TeebyDeeby extends HTMLElement {
         this.out = new OutputParser(this);
 
         this.fromSRC = this.fromSRC.bind(this);
+        this.resizeThead = this.resizeThead.bind(this);
         this.setContent = this.setContent.bind(this);
+
+        this.resizing = 0;
+
+        this._contentEditable = false;
+        this._headersEditable = false;
 
         // for every method in parser which starts with "from", add a method bound to this which calls the parser method then set_content
         for (let method of Object.getOwnPropertyNames(Object.getPrototypeOf(this.parser))) {
@@ -52,7 +58,7 @@ class TeebyDeeby extends HTMLElement {
 //            </table>
 //        `;
 //        this.table = this.shadowRoot.querySelector('table');
-//        this.headersRow = this.table.createTHead();
+//        this.thead = this.table.createTHead();
 //        this.tbody = this.table.createTBody();
 //        this.innerHTML = '';
         this.innerHTML = `
@@ -60,7 +66,7 @@ class TeebyDeeby extends HTMLElement {
             </table>
         `;
         this.table = this.querySelector('table');
-        this.headersRow = this.table.createTHead();
+        this.thead = this.table.createTHead();
         this.tbody = this.table.createTBody();
     }
 
@@ -68,6 +74,10 @@ class TeebyDeeby extends HTMLElement {
         let url = new URL(window.location.href);
         let mode = this.getAttribute('mode') || url.searchParams.get('mode') || 'horizontal';
         let uclass = url.searchParams.get('class');
+        this._contentEditable = this.getAttribute('contenteditable') || url.searchParams.get('contenteditable') || false;
+        this._headersEditable = this.getAttribute('headerseditable') || url.searchParams.get('headerseditable') || false;
+        console.warn("contenteditable", this._contentEditable, this._headersEditable);
+
         if (uclass){
             for (let cls of uclass.split(" ")){
                 this.classList.add(cls.trim());
@@ -155,6 +165,8 @@ class TeebyDeeby extends HTMLElement {
 
     // column operations
     addColumn(headerKey = null, index = -1, fillValue = undefined) {
+
+        console.log("adding column contenteditable", this._contentEditable);
         // insert headerKey into headers at index
         // -1 means append to end, -2 means insert before last element
         if (index < 0) {
@@ -168,7 +180,10 @@ class TeebyDeeby extends HTMLElement {
         // add th tag cell to headers row
         let th = document.createElement('th');
         th.innerHTML = headerKey;
-        this.headersRow.appendChild(th);
+        if (this._headersEditable){
+            th.setAttribute('contenteditable', true);
+        }
+        this.thead.appendChild(th);
 
 
         // modify any old headers of `#index`
@@ -194,8 +209,11 @@ class TeebyDeeby extends HTMLElement {
             if (i == 0) {
                 continue;
             }
-            console.log(row, i, index);
             let cell = row.insertCell(index);
+            if (this._contentEditable){
+                // set attribute to contenteditable
+                cell.setAttribute('contenteditable', true);
+            }
             cell.innerHTML = fillValue;
         }
     }
@@ -253,7 +271,10 @@ class TeebyDeeby extends HTMLElement {
         let row = this.tbody.insertRow(-1);
         for (let value of data) {
             let cell = row.insertCell(-1);
-            cell  .innerHTML = value;
+            if (this._contentEditable){
+                cell.setAttribute('contenteditable', true);
+            }
+            cell.innerHTML = value;
         }
     }
 
@@ -277,7 +298,72 @@ class TeebyDeeby extends HTMLElement {
         for (let d of data) {
             this.addRow(d);
         }
+        // if table height is greater than window height, add scroll class
+        if (this.table.offsetHeight > window.innerHeight) {
+            this.classList.add('scroll');
+        }
+        console.log("set content", this.classList, this.classList.contains('scroll'));
+        if (this.classList.contains('scroll')){
+            this.resizeThead();
+        }
     }
+
+    resizeThead() {
+      this.resizing += 1;
+      let r = this.resizing;
+      // Assuming the first row of tbody represents typical cell widths
+      const firstRowCells = Array.from(this.tbody.children[0].children)
+
+      // Get all the header cells
+      const headerCells = Array.from(this.thead.children)
+
+      // get the width of the first row, not including the scrollbar
+      const tbodyWidth = this.tbody.children[0].offsetWidth;
+
+      // get the width of the header row
+      const theadWidth = this.table.offsetWidth;
+
+      const scrollbarWidth = (theadWidth - tbodyWidth)/2;
+
+      console.warn("resize", tbodyWidth, theadWidth)
+
+      console.log("resizing", firstRowCells, headerCells);
+
+      for (let i =0; i < 20; i++){
+        if (this.resizing !== r){
+          return;
+        }
+
+      // First apply widths from tbody cells to thead cells
+      firstRowCells.map((cell, index) => {
+        if (headerCells[index] !== undefined) {
+          const cellWidth = cell.offsetWidth;
+          if (index === firstRowCells.length - 1) {
+            headerCells[index].style.width = `${cellWidth + scrollbarWidth}px`;
+          }else{
+            headerCells[index].style.width = `${cellWidth}px`;
+          }
+        }
+      });
+
+      // Then apply widths from thead cells to tbody cells
+        headerCells.map((cell, index) => {
+            if (firstRowCells[index] !== undefined) {
+                const cellWidth = cell.offsetWidth;
+                if (index === firstRowCells.length - 1) {
+                    firstRowCells[index].style.width = `${cellWidth - scrollbarWidth}px`;
+                }else{
+                    firstRowCells[index].style.width = `${cellWidth}px`;
+                }
+            }
+        });
+      }
+
+      window.addEventListener('resize', this.resizeThead.bind(this));
+    }
+
+
+
 
     // getters
     get headers() {

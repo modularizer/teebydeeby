@@ -15,6 +15,7 @@ teeby-deeby {
     tr, th, td {
         margin: 1px;
     }
+
     th, td {
         border: 1px solid gray;
         padding: 8px;
@@ -27,9 +28,99 @@ teeby-deeby {
     tr:nth-child(odd) {
         background-color: white;
     }
+    tr:hover {
+
+    }
     th {
         background-color: #555;
         color: white;
+    }
+
+
+    tbody:hover {
+        tr {
+            filter: brightness(95%);
+        }
+        tr:hover {
+            filter: brightness(110%);
+        }
+    }
+    thead:hover {
+        th {
+            filter: brightness(95%);
+        }
+        th:hover {
+            filter: brightness(110%);
+        }
+        /* now change the brightness of the nth-child  in each row */
+        tbody {
+            brightness: 95%;
+        }
+    }
+    td:hover {
+        filter: brightness(120%);
+    }
+}
+
+
+/* hover effects */
+teeby-deeby.hover {
+    tbody:hover {
+        tr {
+            filter: brightness(95%);
+        }
+        tr:hover {
+            filter: brightness(105%);
+        }
+    }
+}
+
+/* width levels */
+teeby-deeby.wide {
+    table {
+        width: 100%;
+    }
+}
+
+teeby-deeby.w80 {
+    table {
+        width: 80%;
+    }
+}
+teeby-deeby.third {
+    table {
+        width: 33.3%;
+    }
+}
+teeby-deeby.quarter {
+    table {
+        width: 25%;
+    }
+}
+
+/* height levels */
+teeby-deeby.tall {
+    table {
+        height: 100%;
+    }
+}
+
+teeby-deeby.scroll {
+    table {
+        table-layout: fixed;
+    }
+    table, tbody {
+        display: block;
+    }
+    tbody {
+        max-height: 88vh;
+        overflow-y: scroll;
+    }
+}
+
+teeby-deeby.h50 {
+    tbody {
+        max-height: 50vh;
     }
 }
 
