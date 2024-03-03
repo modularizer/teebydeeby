@@ -122,6 +122,24 @@ teeby-deeby.gap2 {
 }
 
 /* color schemes */
+@media (prefers-color-scheme: dark) {
+    table {
+        background-color: black;
+    }
+    th {
+        background-color: #212121;
+    }
+    tr {
+        background-color: #616161;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #424242;
+    }
+}
+
+
+
 teeby-deeby.dark {
     table {
         background-color: black;
