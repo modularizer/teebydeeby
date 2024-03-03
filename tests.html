@@ -5,24 +5,28 @@
     <title>TbDb</title>
 <!--    <link rel="stylesheet" href="css/style.css">-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
-    <script src="../teebydeeby.js"></script>
+    <script src="InputParser.js"></script>
+    <script src="OutputParser.js"></script>
+    <link href="teebydeeby.css" rel="stylesheet"/>
+    <script src="teebydeeby.js"></script>
+
 </head>
 <body>
     <h1>1. headers list JSON, data list of lists JSON</h1>
-    <teeby-deeby
+    <teeby-deeby class="nogap"
         headers='["a", "b", "c"]'
         data='[["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]'
     ></teeby-deeby>
 
     <hr/>
     <h1>2. data list</h1>
-    <teeby-deeby
+    <teeby-deeby class="green"
         data='[{"d": "20", "e": 33}, {"d": "40", "e": 55}, {"d": "70", "e": 88}]'
     ></teeby-deeby>
 
     <hr/>
     <h1>3. markdown</h1>
-<teeby-deeby
+<teeby-deeby class="blue soft"
         md="| Name        | Occupation            | Age |
 |-------------|-----------------------|-----|
 | John Doe    | Developer, Frontend   | 30  |
@@ -32,7 +36,7 @@
 
     <hr/>
     <h1>4. csv</h1>
-    <teeby-deeby
+    <teeby-deeby class="square"
         csv="Name,Occupation,Age
 John Doe,Developer,30
 Jane Smith,Graphic Designer,28
@@ -115,6 +119,11 @@ Bob | Builder,Construction Worker,45</teeby-deeby>
         </table>
     </teeby-deeby>
 
+    <h1>11. from src</h1>
+    <iframe src="http://localhost/?src=https://data.cityofnewyork.us/resource/uvxr-2jwn.json" style="width:100vw; height:20vh"></iframe>
+
+    <h1>12. from src</h1>
+    <teeby-deeby src="https://data.cityofnewyork.us/resource/uvxr-2jwn.json"></teeby-deeby>
 
 </body>
 </html>

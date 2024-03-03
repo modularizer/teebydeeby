@@ -1,0 +1,154 @@
+/* basics */
+teeby-deeby {
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    tr, th, td {
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
+    }
+
+    table {
+        border-radius: 5px;
+        background-color: #aaa;
+    }
+
+    tr, th, td {
+        margin: 1px;
+    }
+    th, td {
+        border: 1px solid gray;
+        padding: 8px;
+        text-align: left;
+        border-radius: 3px;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(odd) {
+        background-color: white;
+    }
+    th {
+        background-color: #555;
+        color: white;
+    }
+}
+
+/* padding levels */
+teeby-deeby.p16 {
+    th, td {
+        padding: 16px;
+    }
+}
+teeby-deeby.p12 {
+    th, td {
+        padding: 12px;
+    }
+}
+teeby-deeby.p8 {
+    th, td {
+        padding: 8px;
+    }
+}
+teeby-deeby.p4 {
+    th, td {
+        padding: 4px;
+    }
+}
+teeby-deeby.p2 {
+    th, td {
+        padding: 2px;
+    }
+}
+
+/* boder radius levels */
+teeby-deeby.round {
+    table {
+        border-radius: 5px;
+    }
+    th, td {
+        border-radius: 3px;
+    }
+}
+teeby-deeby.soft {
+    table {
+        border-radius: 3px;
+    }
+    th, td {
+        border-radius: 2px;
+    }
+}
+teeby-deeby.square {
+    table, th, td {
+        border-radius: 0;
+    }
+}
+
+
+/* gap levels */
+teeby-deeby.zero {
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    table, thead, tr, th, td {
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
+    }
+    th, td {
+        border: 0;
+    }
+}
+teeby-deeby.nogap {
+    -webkit-border-horizontal-spacing: 0px;
+    -webkit-border-vertical-spacing: 0px;
+    table, thead, tr, th, td {
+        -webkit-border-horizontal-spacing: 0px;
+        -webkit-border-vertical-spacing: 0px;
+    }
+}
+
+teeby-deeby.gap1 {
+    -webkit-border-horizontal-spacing: 1px;
+    -webkit-border-vertical-spacing: 1px;
+    table, thead, tr, th, td {
+        -webkit-border-horizontal-spacing: 1px;
+        -webkit-border-vertical-spacing: 1px;
+    }
+}
+
+teeby-deeby.gap2 {
+    -webkit-border-horizontal-spacing: 2px;
+    -webkit-border-vertical-spacing: 2px;
+    table, thead, tr, th, td {
+        -webkit-border-horizontal-spacing: 2px;
+        -webkit-border-vertical-spacing: 2px;
+    }
+}
+
+/* color schemes */
+teeby-deeby.green {
+    table {
+        background-color: darkgreen;
+    }
+
+    thead {
+        background-color: lightblue;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+}
+teeby-deeby.blue {
+    table {
+        background-color: darkblue;
+    }
+
+    thead {
+        background-color: lightgreen;
+    }
+
+    th {
+        background-color: #2196FF;
+        color: white;
+    }
+}
