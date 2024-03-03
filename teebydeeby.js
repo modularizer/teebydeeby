@@ -24,6 +24,13 @@ class TeebyDeeby extends HTMLElement {
         this.parser = new InputParser();
         this.out = new OutputParser(this);
 
+        this._onHeaderEdit = this._onHeaderEdit.bind(this);
+        this._onDataEdit = this._onDataEdit.bind(this);
+        this._onDataEditInput = this._onDataEditInput.bind(this);
+        this._onHeaderEditInput = this._onHeaderEditInput.bind(this);
+        this._unsavedHeaderEdits = {};
+        this._unsavedDataEdits = {};
+
         this.fromSRC = this.fromSRC.bind(this);
         this.resizeThead = this.resizeThead.bind(this);
         this.setContent = this.setContent.bind(this);
@@ -159,6 +166,57 @@ class TeebyDeeby extends HTMLElement {
         return this.fromData(headers, data);
     }
 
+    _onDataEditInput(rowInd, colInd, value){
+        console.log("data edit input", rowInd, colInd, value);
+        if (!this._unsavedDataEdits[rowInd]){
+            this._unsavedDataEdits[rowInd] = {};
+        }
+        this._unsavedDataEdits[rowInd][colInd] = value;
+        if (this.onDataEditInput){
+            this.onDataEditInput(rowInd, colInd, value);
+        }
+        if (this.addedResize){
+            this.resizeThead();
+        }
+    }
+    _onDataEdit(rowInd, colInd, value){
+        if (this._unsavedDataEdits[rowInd] && this._unsavedDataEdits[rowInd][colInd]){
+            delete this._unsavedDataEdits[rowInd][colInd];
+            if (Object.keys(this._unsavedDataEdits[rowInd]).length === 0){
+                delete this._unsavedDataEdits[rowInd];
+            }
+        }
+        if (value === this._data[rowInd][colInd]){
+            return;
+        }
+        console.log("data edit", rowInd, colInd, value);
+        this._data[rowInd][colInd] = value;
+        if (this.onDataEdit){
+            this.onDataEdit(rowInd, colInd, value);
+        }
+    }
+    _onHeaderEditInput(colInd, value){
+        console.log("header edit input", colInd, value);
+        this._unsavedHeaderEdits[colInd] = value;
+        if (this.onHeaderEditInput){
+            this.onHeaderEditInput(colInd, value);
+        }
+        if (this.addedResize){
+            this.resizeThead();
+        }
+    }
+    _onHeaderEdit(colInd, value){
+        delete this._unsavedHeaderEdits[colInd];
+        if (value === this._headers[colInd]){
+            return;
+        }
+        console.log("header edit", colInd, value);
+        this._headers[colInd] = value;
+        if (this.onHeaderEdit){
+            this.onHeaderEdit(colInd, value);
+        }
+    }
+
     fromSRC(src){
         this.parser.fromSRC(src).then(([h, d]) => this.setContent(h, d));
     }
@@ -182,6 +240,12 @@ class TeebyDeeby extends HTMLElement {
         th.innerHTML = headerKey;
         if (this._headersEditable){
             th.setAttribute('contenteditable', true);
+            th.addEventListener('input', (e) => {
+                this._onHeaderEditInput(th.cellIndex, e.target.innerHTML);
+            })
+            th.addEventListener('blur', (e) => {
+                this._onHeaderEdit(th.cellIndex, e.target.innerHTML);
+            })
         }
         this.thead.appendChild(th);
 
@@ -213,6 +277,12 @@ class TeebyDeeby extends HTMLElement {
             if (this._contentEditable){
                 // set attribute to contenteditable
                 cell.setAttribute('contenteditable', true);
+                cell.addEventListener('input', (e) => {
+                    this._onDataEditInput(row.rowIndex, cell.cellIndex, e.target.innerHTML);
+                });
+                cell.addEventListener('blur', (e) => {
+                    this._onDataEdit(row.rowIndex, cell.cellIndex, e.target.innerHTML);
+                })
             }
             cell.innerHTML = fillValue;
         }
@@ -273,6 +343,12 @@ class TeebyDeeby extends HTMLElement {
             let cell = row.insertCell(-1);
             if (this._contentEditable){
                 cell.setAttribute('contenteditable', true);
+                cell.addEventListener('input', (e) => {
+                    this._onDataEditInput(row.rowIndex, cell.cellIndex, e.target.innerHTML);
+                });
+                cell.addEventListener('blur', (e) => {
+                    this._onDataEdit(row.rowIndex, cell.cellIndex, e.target.innerHTML);
+                })
             }
             cell.innerHTML = value;
         }
@@ -359,7 +435,10 @@ class TeebyDeeby extends HTMLElement {
         });
       }
 
-      window.addEventListener('resize', this.resizeThead.bind(this));
+      if (!this.addedResize){
+          window.addEventListener('resize', this.resizeThead.bind(this));
+          this.addedResize = true;
+      }
     }
 
 
