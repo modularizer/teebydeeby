@@ -62,19 +62,6 @@ teeby-deeby {
     }
 }
 
-
-/* hover effects */
-teeby-deeby.hover {
-    tbody:hover {
-        tr {
-            filter: brightness(95%);
-        }
-        tr:hover {
-            filter: brightness(105%);
-        }
-    }
-}
-
 /* width levels */
 teeby-deeby.wide {
     table {
@@ -99,12 +86,6 @@ teeby-deeby.quarter {
 }
 
 /* height levels */
-teeby-deeby.tall {
-    table {
-        height: 100%;
-    }
-}
-
 teeby-deeby.scroll {
     table {
         table-layout: fixed;
