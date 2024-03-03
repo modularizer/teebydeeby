@@ -31,7 +31,9 @@ class TeebyDeeby extends HTMLElement {
         for (let method of Object.getOwnPropertyNames(Object.getPrototypeOf(this.parser))) {
             if (method.startsWith('from')) {
                 if (!this[method]){
+                    console.log("adding", method);
                     this[method] = (function (a, b){
+                        console.log("calling", method, a, b);
                         let [h, d] = this.parser[method](a, b);
                         this.setContent(h, d);
                     }).bind(this);
@@ -63,11 +65,20 @@ class TeebyDeeby extends HTMLElement {
     }
 
     onload(){
+        let url = new URL(window.location.href);
+        let mode = this.getAttribute('mode') || url.searchParams.get('mode') || 'horizontal';
+        let uclass = url.searchParams.get('class');
+        if (uclass){
+            for (let cls of uclass.split(" ")){
+                this.classList.add(cls.trim());
+            }
+        }
+        this.parser.defaultFromDictMode = mode;
+
         let t = this.innerHTML.trim()
         this.setupInnerHTML();
         if (t){
-            this.fromString(t);
-            return
+            return this.fromString(t);
         }
 
         // get headers and data from attributes
@@ -79,48 +90,63 @@ class TeebyDeeby extends HTMLElement {
         let src = this.getAttribute('src');
 
         if (src){
-            this.fromSRC(src);
-            return
+            return this.fromSRC(src);
         }
 
 
         console.log(this, {headers, data, markdown, csv})
         if ((!headers) && (!data)) {
             if (markdown) {
-                this.fromMarkdown(markdown);
+                return this.fromMarkdown(markdown);
             }else if (csv) {
-                this.fromCSV(csv);
+                return this.fromCSV(csv);
             }else{
                 // get from url search params
-                let url = new URL(window.location.href);
+
                 headers = url.searchParams.get('headers');
                 data = url.searchParams.get('data');
                 markdown = url.searchParams.get('md');
                 csv = url.searchParams.get('csv');
                 src= url.searchParams.get('src');
                 if (src){
-                    this.fromSRC(src);
-
-                    return
+                    return this.fromSRC(src);
                 }
 
                 console.log("url", {headers, data, markdown, csv})
 
                 if ((!headers) && (!data)) {
+                    console.log("no headers or data");
                     if (markdown) {
-                        this.fromMarkdown(markdown);
+                        return this.fromMarkdown(markdown);
                     }else if (csv) {
-                        this.fromCSV(csv);
+                        return this.fromCSV(csv);
                     }else{
-                        // wait for user to set content
+                        console.log("displaying default")
 
+                        // wait for user to set content
+                        return this.fromData(
+                            ["fmt", "what", "attribute(s)", "lz okay", "b64 okay"],
+                            [
+                                ["json", "autodetect", "data", "yes", "yes"],
+                                ["url", "path to .json, .md, .csv", "src", "yes", "yes"],
+                                ["markdown", "table", "md", "yes", "yes"],
+                                ["csv", "table", "csv", "yes", "yes"],
+                                ["innerHTML", "table", "N/A", "no", "no"],
+                                ["headers + list of lists", "list", "headers", "yes", "yes"],
+                                ["list of lists", "row values", "data", "yes", "yes"],
+                                ["list of dicts", "row values", "data", "yes", "yes"],
+                                ["dict of dicts", "row values", "data", "yes", "yes"],
+                                ["dict of lists", "column values", "data", "yes", "yes"],
+                                ["dict of values", "single row (if mode = 'horizontal')", "data", "yes", "yes"],
+                                ["dict of values", "key/value columns (if mode = 'vertical')", "data", "yes", "yes"],
+                            ]
+                        )
                     }
                 }
-                this.fromData(headers, data);
+                return this.fromData(headers, data);
             }
-            return
         }
-        this.fromData(headers, data);
+        return this.fromData(headers, data);
     }
 
     fromSRC(src){

@@ -1,9 +1,11 @@
 class InputParser {
-    constructor() {
+    constructor(defaultFromDictMode = 'horizontal') {
         this.parse = this.parse.bind(this);
         this.testString = this.testString.bind(this);
         this.parseString = this.parseString.bind(this);
         this.isDict = this.isDict.bind(this);
+
+        this.defaultFromDictMode = defaultFromDictMode;
 
         // general from methods
         this.fromData = this.fromData.bind(this);
@@ -85,7 +87,7 @@ class InputParser {
     }
     fromData(headers, data) {
         if (!headers && !data) {
-            return;
+            return [[], []]
         }
         headers = this.parse(headers);
         data = this.parse(data);
@@ -249,8 +251,55 @@ class InputParser {
         console.log("from headers and dict", headers, data);
         return this.fromHeadersAndListOfDicts(headers, [data]);
     }
-    fromDict(data, mode='horizontal') {
+    fromDict(data, mode) {
+        mode = mode || this.defaultFromDictMode;
         data = this.parse(data);
+        let values = Array.from(Object.values(data));
+        if (values.every(x => x instanceof Array)) {
+            let headers = Array.from(Object.keys(data));
+            let i = 0;
+            let numRows = data[headers[0]].length;
+            if (!values.every(x => x.length === numRows)) {
+                throw new Error('Number of rows in data does not match number of rows in headers');
+            }
+            let newdata = [];
+            for (i = 0; i < numRows; i++) {
+                let row = [];
+                for (let header of headers) {
+                    row.push(data[header][i]);
+                }
+                newdata.push(row);
+            }
+            return this.fromHeadersAndListOfLists(headers, newdata);
+        }else if (values.every(this.isDict)){
+            let keyIsValueInEveryDict = true;
+            for (let [k, v] of Object.entries(data)){
+                if (!Object.keys(v).includes(k)){
+                    return false;
+                }
+            }
+            if (keyIsValueInEveryDict){
+                return this.fromListOfDicts(values);
+            }
+            let headers = [];
+            for (let row of values) {
+                for (let key in row) {
+                    if (!headers.includes(key)) {
+                        headers.push(key);
+                    }
+                }
+            }
+            let keyNameChoices = ["name", "id", "key", "pk"]
+            // get first keyNameChoice not in headers
+            let keyName = keyNameChoices.find(x => !headers.includes(x));
+            let newValues = [];
+            for (let [k, v] of Object.entries(data)){
+                v[keyName] = k;
+                newValues.push(v);
+            }
+            return this.fromListOfDicts(newValues);
+        }
+
         if (mode === 'horizontal') {
             console.log("from dict (horizontal)", data);
             let headers = Object.keys(data);

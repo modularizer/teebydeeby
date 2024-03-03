@@ -104,7 +104,6 @@ teeby-deeby.nogap {
         -webkit-border-vertical-spacing: 0px;
     }
 }
-
 teeby-deeby.gap1 {
     -webkit-border-horizontal-spacing: 1px;
     -webkit-border-vertical-spacing: 1px;
@@ -113,7 +112,6 @@ teeby-deeby.gap1 {
         -webkit-border-vertical-spacing: 1px;
     }
 }
-
 teeby-deeby.gap2 {
     -webkit-border-horizontal-spacing: 2px;
     -webkit-border-vertical-spacing: 2px;
@@ -124,31 +122,144 @@ teeby-deeby.gap2 {
 }
 
 /* color schemes */
+teeby-deeby.dark {
+    table {
+        background-color: black;
+    }
+    th {
+        background-color: #212121;
+    }
+    tr {
+        background-color: #616161;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #424242;
+    }
+}
+
+teeby-deeby.yellow {
+    table {
+        background-color: darkgoldenrod;
+    }
+    th {
+        background-color: #FFEB3B;
+    }
+}
 teeby-deeby.green {
     table {
         background-color: darkgreen;
     }
-
-    thead {
-        background-color: lightblue;
-    }
-
     th {
         background-color: #4CAF50;
-        color: white;
     }
 }
 teeby-deeby.blue {
     table {
         background-color: darkblue;
     }
-
-    thead {
-        background-color: lightgreen;
-    }
-
     th {
         background-color: #2196FF;
+    }
+}
+teeby-deeby.purple {
+    table {
+        background-color: darkpurple;
+    }
+    th {
+        background-color: #9C27B0;
+    }
+}
+teeby-deeby.red {
+    table {
+        background-color: darkred;
+    }
+    th {
+        background-color: #F44336;
+    }
+}
+teeby-deeby.orange {
+    table {
+        background-color: darkorange;
+    }
+    th {
+        background-color: #FF9800;
+    }
+}
+teeby-deeby.rainbow {
+
+    /* use tr:nth-child to alternate through rainbow colors */
+    th {
+        background-color: black;
+    }
+    tr {
+        color: white;
+    }
+    tr:nth-child(7n+1){
+        background-color: red;
+    }
+    tr:nth-child(7n+2){
+        background-color: orange;
+        color: black;
+    }
+    tr:nth-child(7n+3){
+        background-color: yellow;
+        color: black;
+    }
+    tr:nth-child(7n+4){
+        background-color: green;
+    }
+    tr:nth-child(7n+5){
+        background-color: blue;
+    }
+    tr:nth-child(7n+6){
+        background-color: indigo;
+    }
+    tr:nth-child(7n+7){
+        background-color: violet;
+    }
+
+
+}
+
+
+
+
+
+/* dark mode colors */
+teeby-deeby.dblue {
+    table {
+        background-color: black;
+    }
+    th {
+        background-color: #003;
+    }
+    tr {
+        background-color: #616161;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #424242;
+    }
+    td {
+        color: white;
+    }
+}
+teeby-deeby.dgreen {
+    table {
+        background-color: black;
+    }
+    th {
+        background-color: #030;
+    }
+    tr {
+        background-color: #616161;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #424242;
+    }
+    td {
         color: white;
     }
 }
