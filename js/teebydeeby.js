@@ -24,6 +24,8 @@ class TeebyDeeby extends HTMLElement {
         this.parser = new InputParser();
         this.out = new OutputParser(this);
 
+        this.sort = this.sort.bind(this);
+        this._onTHClick = this._onTHClick.bind(this);
         this._onHeaderEdit = this._onHeaderEdit.bind(this);
         this._onDataEdit = this._onDataEdit.bind(this);
         this._onDataEditInput = this._onDataEditInput.bind(this);
@@ -167,6 +169,88 @@ class TeebyDeeby extends HTMLElement {
         return this.fromData(headers, data);
     }
 
+    _onTHClick(e){
+        console.log("th click", e);
+        let th = e.target;
+        // get index of th in parent's children
+        let colInd = Array.from(th.parentElement.children).indexOf(th);
+        console.log("colInd", colInd);
+        if (th.classList.contains('up')){
+            this.sort(colInd, 0);
+        }else if (th.classList.contains('down')){
+            this.sort(colInd, 1);
+        }else{
+            this.sort(colInd, -1);
+        }
+    }
+    sort(colInd, dir = 1){
+        if (typeof colInd === 'string'){
+            colInd = this._headers.indexOf(colInd);
+        }else if (colInd < 0){
+            colInd = this._headers.length + colInd;
+        }
+        if (dir === "up"){
+            dir = 1;
+        }
+        if (dir === "down"){
+            dir = -1;
+        }
+        if ((dir === "none") || (!dir)){
+            dir = 0;
+        }
+        let th = this.thead.children[colInd];
+        let oldDir = parseInt(th.getAttribute('dir') || '0');
+        console.log(th, oldDir, dir);
+        if (oldDir === dir){
+            return
+        }
+
+
+        // change styles
+        th.classList.remove('down');
+        th.classList.remove('up');
+        th.classList.remove('none');
+        if (dir === 0){
+            th.classList.add('none');
+        }else if (dir === 1){
+            th.classList.add('up');
+        }else if (dir === -1){
+            th.classList.add('down');
+        }else{
+            throw new Error("dir must be 1, 0, or -1");
+        }
+        th.setAttribute('dir', dir);
+
+        // sort data
+        let column = this._data.map((row, i) => {return {value: row[colInd], index: i}});
+        if (column.every(x => !isNaN(x.value))){
+            column = column.map(x => {return {value: parseFloat(x.value), index: x.index}});
+        }
+        let sortFunc = (a, b) => {
+            let av = a.value;
+            let bv = b.value;
+            if (av < bv){
+                return dir;
+            }
+            if (av > bv){
+                return -dir;
+            }
+            return 0;
+        }
+        column.sort(sortFunc);
+
+        // move each row
+        let oldRows = Array.from(this.tbody.children);
+        let newData = [];
+        this.tbody.innerHTML = '';
+        for (let row of column){
+            newData.push(this._data[row.index]);
+            this.tbody.appendChild(oldRows[row.index]);
+        }
+        this._data = newData;
+
+    }
+
     _onDataEditInput(rowInd, colInd, value){
         console.log("data edit input", rowInd, colInd, value);
         if (!this._unsavedDataEdits[rowInd]){
@@ -248,6 +332,7 @@ class TeebyDeeby extends HTMLElement {
                 this._onHeaderEdit(th.cellIndex, e.target.innerHTML);
             })
         }
+        th.addEventListener('click', this._onTHClick);
         if (index === this._headers.length - 1){
             this.thead.appendChild(th);
         }else{

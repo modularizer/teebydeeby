@@ -58,11 +58,11 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
 - [ ] Front-end rendering features
   - [ ] pagination
   - [ ] filtering
-  - [ ] sorting
+  - [x] sorting
   - [ ] searching
   - [ ] hiding columns
-  - [ ] reordering rows
-  - [ ] reordering columns
+  - [ ] drag/drop reordering rows
+  - [ ] drag/drop reordering columns
   - [ ] data types
     - [ ] per column data types
     - [ ] autodetected data types

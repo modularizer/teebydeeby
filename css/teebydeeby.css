@@ -35,7 +35,42 @@ teeby-deeby {
         background-color: #555;
         color: white;
     }
+    th {
+      position: relative; /* Ensures that the pseudo-elements are positioned relative to the th */
+      padding-right: 20px; /* Provides space for the arrows */
+    }
 
+    th::after,
+    th::before {
+      position: absolute;
+      right: 5px; /* Position arrows towards the right */
+      top: 50%; /* Center vertically */
+      border: 5px solid transparent; /* Create arrow shape */
+      font-size: 0.5em;
+      opacity: 0.1;
+    }
+    th::after {
+      content: '▲';
+      transform: translateY(-70%) scaleX(125%);
+    }
+    th::before {
+      content: '▼';
+      transform: translateY(-10%) scaleX(125%);
+    }
+
+    th.up::after {
+        opacity: 0.8;
+    }
+    th.down::before {
+        opacity: 0.8;
+    }
+
+    th.up:hover::before {
+        opacity: 0.3;
+    }
+    th.down:hover::after {
+        opacity: 0.3;
+    }
 
     tbody:hover {
         tr {
@@ -319,6 +354,7 @@ teeby-deeby.rainbow {
     tr:nth-child(7n+7){
         background-color: violet;
     }
+
 }
 
 teeby-deeby.dblue {
