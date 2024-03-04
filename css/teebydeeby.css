@@ -127,6 +127,9 @@ teeby-deeby {
 }
 
 
+teeby-deeby.dragover {
+    opacity: 0.5;
+}
 
 teeby-deeby.pager {
     .pagination {

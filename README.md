@@ -44,8 +44,7 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
   - [x] lz compressed string 
     * NOTE: requires `lz-string` package from `<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>`
   - [x] base64 encoded string
-  - [ ] file upload
-  - [ ] drag and drop
+  - [x] drag and drop file upload
   - [ ] copy and paste
 - [x] Add styling options
   - [x] width

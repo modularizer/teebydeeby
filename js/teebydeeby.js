@@ -28,6 +28,7 @@ class TeebyDeeby extends HTMLElement {
         this.out = new OutputParser(this);
 
         this.sort = this.sort.bind(this);
+        this.clear = this.clear.bind(this);
         this.rePage = this.rePage.bind(this);
         this._onTHClick = this._onTHClick.bind(this);
         this._onHeaderEdit = this._onHeaderEdit.bind(this);
@@ -97,6 +98,7 @@ class TeebyDeeby extends HTMLElement {
                         <button class="next">next</button>
                     </div>
                 </div>
+                <input type="file" id="file_input" style="display:none;" />
             </table>
 
         `;
@@ -133,6 +135,44 @@ class TeebyDeeby extends HTMLElement {
                 this.page += 1;
             });
         }
+
+
+
+        this.addEventListener('dragover', (event) => {
+          console.log("dragover", event.dataTransfer.items);
+          event.preventDefault(); // Necessary to allow the drop
+          if (event.dataTransfer.items && event.dataTransfer.items.length > 0 && event.dataTransfer.items[0].kind === 'file') {
+            // This indicates that at least one of the dragged items is a file.
+            this.classList.add('dragover');
+          }
+        });
+        this.addEventListener('dragleave', (event) => {
+          this.classList.remove('dragover');
+        });
+        this.addEventListener('drop', (event) => {
+          event.preventDefault();
+          this.classList.remove('dragover');
+          if (event.dataTransfer.items && event.dataTransfer.items.length > 0 && event.dataTransfer.items[0].kind === 'file') {
+            let file = event.dataTransfer.items[0].getAsFile();
+            console.log("file", file);
+            let stringContent = '';
+            let reader = new FileReader();
+            reader.onload = (e) => {
+              stringContent = e.target.result;
+              console.log("file", file, stringContent);
+              this.fromString(stringContent);
+            };
+            reader.readAsText(file);
+          }
+        });
+
+    }
+    clear(){
+        this._headers = [];
+        this._data = [];
+        this.thead.innerHTML = '';
+        this.tbody.innerHTML = '';
+        this.tfoot.innerHTML = '';
     }
 
 
@@ -618,6 +658,7 @@ class TeebyDeeby extends HTMLElement {
 
 
     setContent(headers, data) {
+        this.clear();
         for (let h of headers) {
             this.addColumn(h);
         }
