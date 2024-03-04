@@ -2,7 +2,7 @@ class TeebyDeeby extends HTMLElement {
     constructor() {
         super();
 
-        this._pageSize = 50;
+        this._pageSize = 25;
         this._page = 0;
 
 
@@ -145,15 +145,18 @@ class TeebyDeeby extends HTMLElement {
         this._headersEditable = this.getAttribute('headerseditable') || url.searchParams.get('headerseditable') || false;
 
 
-        this._pageSize = parseInt(this.getAttribute('pagesize') || url.searchParams.get('pagesize') || 50);
+        let _pageSize = this.getAttribute('pagesize') || url.searchParams.get('pagesize');
+        this._pageSize = parseInt(this.getAttribute('pagesize') || url.searchParams.get('pagesize') || this._pageSize);
         if (this._pageSize instanceof String || typeof this._pageSize === 'string'){
             this._pageSize = parseInt(this._pageSize);
         }
-        this._page = parseInt(this.getAttribute('page') || url.searchParams.get('page') || 0);
+        let _page = this.getAttribute('page') || url.searchParams.get('page');
+        this._page = parseInt(_page || this._page);
         if (this._page instanceof String || typeof this._page === 'string'){
             this._page = parseInt(this._page);
         }
-        if (((this.getAttribute('page') || url.searchParams.get('page')) === null) && (this._pageSize > 0)){
+        console.warn("page", _page, this.getAttribute('page'), url.searchParams.get('page'), (this.getAttribute('page') || url.searchParams.get('page')));
+        if ((_page === null) && (parseInt(_pageSize) > 0)){
             this._page = 1;
         }
         if ((this._page > 0) && (this._pageSize > 0)){
@@ -428,6 +431,7 @@ class TeebyDeeby extends HTMLElement {
         // add th tag cell to headers row
         let th = document.createElement('th');
         th.innerHTML = headerKey;
+        th.classList.add('none');
         if (this._headersEditable){
             th.setAttribute('contenteditable', true);
             th.addEventListener('input', (e) => {

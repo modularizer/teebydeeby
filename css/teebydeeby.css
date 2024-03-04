@@ -79,11 +79,15 @@ teeby-deeby {
         opacity: 0.8;
     }
 
-    th.up:hover::before {
+    th.none:hover::before,
+    th.none:hover::after {
         opacity: 0.3;
     }
+    th.up:hover::before {
+        opacity: 0.5;
+    }
     th.down:hover::after {
-        opacity: 0.3;
+        opacity: 0.5;
     }
 
     tbody:hover {
