@@ -1,3 +1,17 @@
+.hidden {
+    display: none;
+}
+.page, .pageSize, .numPages {
+    width: 3em;
+}
+.arrows {
+    float: right;
+}
+.pagination {
+    width: 100%;
+    display: none;
+}
+
 
 teeby-deeby {
     -webkit-border-horizontal-spacing: 0px;
@@ -107,6 +121,15 @@ teeby-deeby {
         display: none;
     }
 }
+
+
+
+teeby-deeby.pager {
+    .pagination {
+        display: block;
+    }
+}
+
 
 teeby-deeby.footer {
     tfoot {

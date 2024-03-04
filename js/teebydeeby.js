@@ -2,6 +2,9 @@ class TeebyDeeby extends HTMLElement {
     constructor() {
         super();
 
+        this._pageSize = 50;
+        this._page = 0;
+
 
         this._headers = [];
         this._data = []; // list of lists
@@ -25,6 +28,7 @@ class TeebyDeeby extends HTMLElement {
         this.out = new OutputParser(this);
 
         this.sort = this.sort.bind(this);
+        this.rePage = this.rePage.bind(this);
         this._onTHClick = this._onTHClick.bind(this);
         this._onHeaderEdit = this._onHeaderEdit.bind(this);
         this._onDataEdit = this._onDataEdit.bind(this);
@@ -72,13 +76,66 @@ class TeebyDeeby extends HTMLElement {
 //        this.innerHTML = '';
         this.innerHTML = `
             <table>
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+                <div class="pagination">
+                    <span>Page </span>
+                    <input type="number" class="page" value="0" min="0"  max="10000" >
+                    <span>/</span>
+                    <input type="number" class="numPages" min="0"  max="10000" value="0" disabled>
+
+                    <span>(size</span>
+                    <input type="number" class="pageSize" min="0" max="10000" value="50">
+                    <span>)</span>
+
+                    <div class="arrows hidden">
+                        <button class="prev">prev</button>
+                        <button class="next">next</button>
+                    </div>
+                </div>
             </table>
+
         `;
         this.table = this.querySelector('table');
-        this.thead = this.table.createTHead();
-        this.tbody = this.table.createTBody();
-        this.tfoot = this.table.createTFoot();
+        this.thead = this.querySelector('thead');
+        this.tbody = this.querySelector('tbody');
+        this.tfoot = this.querySelector('tfoot');
+        this.pager = this.querySelector('.pager');
+
+        this.pageInput = this.querySelector('.page');
+        this.pageInput.value = this._page;
+        this.numPagesInput = this.querySelector('.numPages');
+        this.numPagesInput.value = this._numPages;
+        this.pageSizeInput = this.querySelector('.pageSize');
+        this.pageSizeInput.value = this._pageSize;
+
+
+        this.pageSizeInput.addEventListener('input', (e) => {
+            this.pageSize = e.target.value;
+        });
+        this.pageInput.addEventListener('input', (e) => {
+            this.page = e.target.value;
+        });
+
+        this.prev = this.querySelector('.prev');
+        this.next = this.querySelector('.next');
+        if (this.prev){
+            this.prev.addEventListener('click', (e) => {
+                this.page -= 1;
+            });
+        }
+        if (this.next){
+            this.next.addEventListener('click', (e) => {
+                this.page += 1;
+            });
+        }
     }
+
+
 
     onload(){
         let url = new URL(window.location.href);
@@ -86,6 +143,22 @@ class TeebyDeeby extends HTMLElement {
         let uclass = url.searchParams.get('class');
         this._contentEditable = this.getAttribute('contenteditable') || url.searchParams.get('contenteditable') || false;
         this._headersEditable = this.getAttribute('headerseditable') || url.searchParams.get('headerseditable') || false;
+
+
+        this._pageSize = parseInt(this.getAttribute('pagesize') || url.searchParams.get('pagesize') || 50);
+        if (this._pageSize instanceof String || typeof this._pageSize === 'string'){
+            this._pageSize = parseInt(this._pageSize);
+        }
+        this._page = parseInt(this.getAttribute('page') || url.searchParams.get('page') || 0);
+        if (this._page instanceof String || typeof this._page === 'string'){
+            this._page = parseInt(this._page);
+        }
+        if (((this.getAttribute('page') || url.searchParams.get('page')) === null) && (this._pageSize > 0)){
+            this._page = 1;
+        }
+        if ((this._page > 0) && (this._pageSize > 0)){
+            this.classList.add("pager");
+        }
         console.warn("contenteditable", this._contentEditable, this._headersEditable);
 
         if (uclass){
@@ -108,6 +181,8 @@ class TeebyDeeby extends HTMLElement {
         let markdown = this.getAttribute('md');
         let csv = this.getAttribute('csv');
         let src = this.getAttribute('src');
+
+
 
         if (src){
             return this.fromSRC(src);
@@ -167,6 +242,36 @@ class TeebyDeeby extends HTMLElement {
             }
         }
         return this.fromData(headers, data);
+    }
+
+    get minRow(){
+        return this.page?((this._page - 1) * this._pageSize):0;
+    }
+    get maxRow(){
+        return this.page?(this._page * this._pageSize):this._data.length;
+    }
+
+    get pageSize(){
+        return this._pageSize;
+    }
+    get page(){
+        return this._page;
+    }
+    get numPages(){
+        return Math.ceil(this._data.length / this._pageSize);
+    }
+    set page(value){
+        value = parseInt(value);
+        this._page = value;
+        this.pageInput.value = value;
+        this.rePage();
+    }
+    set pageSize(value){
+        value = parseInt(value);
+        this._pageSize = value;
+        this.pageSizeInput.value = value;
+        this.numPagesInput.value = this.numPages;
+        this.rePage();
     }
 
     _onTHClick(e){
@@ -451,11 +556,32 @@ class TeebyDeeby extends HTMLElement {
             }
             cell.innerHTML = value;
         }
+
+        let rowInd = this._data.length - 1;
+        if (this.minRow <= rowInd && rowInd < this.maxRow){
+            row.classList.remove('hidden');
+        } else {
+            row.classList.add('hidden');
+        }
+        this.numPagesInput.value = this.numPages;
     }
 
     removeRow(index) {
         this._data.splice(index, 1);
         this.tbody.deleteRow(index);
+
+        if (index < 0) {
+            index = this._data.length + index;
+        }
+
+        let nextRow = this.tbody.children[index];
+        if (nextRow){
+            if (this.minRow <= index && index < this.maxRow){
+                nextRow.classList.remove('hidden');
+            } else {
+                nextRow.classList.add('hidden');
+            }
+        }
     }
 
     moveRow(startIndex, endIndex) {
@@ -463,6 +589,27 @@ class TeebyDeeby extends HTMLElement {
         this._data.splice(endIndex, 0, data);
         let row = this.tbody.deleteRow(startIndex);
         this.tbody.insertBefore(row, this.tbody.children[endIndex]);
+        this.rePage();
+
+    }
+
+    rePage(){
+        if ((this._page > 0) && (this._pageSize > 0)){
+            this.classList.add("pager");
+        }
+
+        // update hidden class on all rows
+        for (let i = 0; i < this._data.length; i++){
+            let row = this.tbody.children[i];
+            if (this.minRow <= i && i < this.maxRow){
+                row.classList.remove('hidden');
+            } else {
+                row.classList.add('hidden');
+            }
+        }
+        if (this.addedResize){
+            this.resizeThead();
+        }
     }
 
 

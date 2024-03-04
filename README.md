@@ -56,7 +56,7 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
   - [x] colors
   - [x] scroll
 - [ ] Front-end rendering features
-  - [ ] pagination
+  - [x] pagination
   - [ ] filtering
   - [x] sorting
   - [ ] searching
