@@ -378,12 +378,13 @@ class TeebyDeeby extends HTMLElement {
 
         // sort data
         let column = this._data.map((row, i) => {return {value: row[colInd], index: i}});
-        if (column.every(x => !isNaN(x.value))){
-            column = column.map(x => {return {value: parseFloat(x.value), index: x.index}});
-        }
         let sortFunc = (a, b) => {
             let av = a.value;
             let bv = b.value;
+            if (!isNaN(av) && !isNaN(bv)){
+                av = parseFloat(av);
+                bv = parseFloat(bv);
+            }
             if (av < bv){
                 return dir;
             }

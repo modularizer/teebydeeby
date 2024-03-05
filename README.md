@@ -21,7 +21,7 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
 ### HTML usage
 1. import and use all in one
     ```html
-    <script src="http://localhost/tbdb.js">[
+    <script src="https://modularizer.github.io/teebydeeby/tbdb.js">[
         {"name": "Fred", "age": 23, "height": "5'10\""},
         {"name": "Sally", "age": 25, "height": "5'6\""},
         {"name": "Bob", "age": 27, "height": "6'0\""}
@@ -144,6 +144,8 @@ innerHTML of a `<table>` tag nested in the `<teeby-deeby>` tag will be used as t
 * `mode` - if the data is a dictionary, then it can be `horizontal` or `vertical`
 * `contenteditable` - whether data can be edited
 * `headereditable` - whether headers can be edited
+* `page` - the page number to start on
+* `pagesize` - the number of rows to show per page
 
 ## Styles
 
