@@ -124,6 +124,10 @@ teeby-deeby {
     tfoot {
         display: none;
     }
+
+    input[type=checkbox] {
+        filter: grayscale(1);
+    }
 }
 
 

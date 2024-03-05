@@ -71,17 +71,18 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
   - [ ] hiding columns
   - [ ] drag/drop reordering rows
   - [ ] drag/drop reordering columns
-  - [ ] data types
+  - [x] data types
     - [ ] per column data types
-    - [ ] autodetected data types
-    - [ ] int
-    - [ ] float
-    - [ ] date
-    - [ ] time
-    - [ ] datetime
-    - [ ] currency
-    - [ ] percent
-    - [ ] boolean
+    - [x] autodetected data types
+    - [x] int
+    - [x] float
+    - [x] image
+    - [x] date
+    - [x] time
+    - [x] datetime
+    - [x] currency
+    - [x] percent
+    - [x] boolean
     - [x] string
 - [ ] Editing
   - [x] contenteditable

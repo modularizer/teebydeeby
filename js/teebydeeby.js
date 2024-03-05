@@ -32,6 +32,8 @@ class TeebyDeeby extends HTMLElement {
         this.sort = this.sort.bind(this);
         this.clear = this.clear.bind(this);
         this.rePage = this.rePage.bind(this);
+        this.setCellValue = this.setCellValue.bind(this);
+
         this._onTHClick = this._onTHClick.bind(this);
         this._onHeaderEdit = this._onHeaderEdit.bind(this);
         this._onDataEdit = this._onDataEdit.bind(this);
@@ -381,9 +383,12 @@ class TeebyDeeby extends HTMLElement {
         let sortFunc = (a, b) => {
             let av = a.value;
             let bv = b.value;
-            if (!isNaN(av) && !isNaN(bv)){
-                av = parseFloat(av);
-                bv = parseFloat(bv);
+
+            let ta = ('' + av).replace('$','')
+            let tb = ('' + bv).replace('$','')
+            if (!isNaN(ta) && !isNaN(tb)){
+                av = parseFloat(ta);
+                bv = parseFloat(tb);
             }
             if (av < bv){
                 return dir;
@@ -430,8 +435,7 @@ class TeebyDeeby extends HTMLElement {
         if (value === this._data[rowInd][colInd]){
             return;
         }
-        console.log("data edit", rowInd, colInd, value);
-        this._data[rowInd][colInd] = value;
+        this.setCellValue(rowInd, colInd, value);
         if (this.onDataEdit){
             this.onDataEdit(rowInd, colInd, value);
         }
@@ -606,7 +610,7 @@ class TeebyDeeby extends HTMLElement {
                     this._onDataEdit(row.rowIndex, cell.cellIndex, e.target.innerHTML);
                 })
             }
-            cell.innerHTML = value;
+            this.setCellValue(this.tbody.children.length - 1, cell.cellIndex, value);
         }
 
         let rowInd = this._data.length - 1;
@@ -616,6 +620,13 @@ class TeebyDeeby extends HTMLElement {
             row.classList.add('hidden');
         }
         this.numPagesInput.value = this.numPages;
+    }
+
+    setCellValue(rowInd, colInd, value){
+        this._data[rowInd][colInd] = value;
+        let cell = this.tbody.children[rowInd].children[colInd];
+        console.log("set cell value", rowInd, colInd, value, cell);
+        setCellValue(cell, value, this._contentEditable);
     }
 
     removeRow(index) {
