@@ -1,3 +1,5 @@
+if (!window.loadcssimported) {
+
 document.addEventListener('DOMContentLoaded', function() {
     // add a stylesheet from a string
     let css = `
@@ -17,3 +19,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     head.appendChild(style);
 });
+    window.loadcssimported = true;
+}

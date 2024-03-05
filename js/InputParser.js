@@ -1,4 +1,7 @@
-window.dlz = LZString?LZString.decompressFromEncodedURIComponent:()=>{console.error('LZString not found. add <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> to your html');return ''};
+if (!window.inputparserimported){
+
+
+window.dlz = window.LZString?window.LZString.decompressFromEncodedURIComponent:()=>{console.error('LZString not found. add <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> to your html');return ''};
 
 class InputParser {
     constructor(defaultFromDictMode = 'horizontal') {
@@ -344,4 +347,7 @@ class InputParser {
         let headers = new Array(data[0].length).fill(null).map((x, i) => `#<${i}>`);
         return [headers, data]
     }
+}
+window.InputParser = InputParser;
+window.inputparserimported = true;
 }

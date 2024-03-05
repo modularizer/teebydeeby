@@ -1,4 +1,7 @@
-window.lz = LZString?LZString.compressToEncodedURIComponent:()=>{console.error('LZString not found. add <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> to your html');return ''};
+if (!window.outputparserimported) {
+
+
+window.lz = window.LZString?window.LZString.compressToEncodedURIComponent:()=>{console.error('LZString not found. add <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script> to your html');return ''};
 class OutputParser {
     constructor(tbdb){
         this.tbdb = tbdb;
@@ -99,4 +102,8 @@ class OutputParser {
     get b64md() {
         return btoa(this.md);
     }
+}
+
+window.OutputParser = OutputParser;
+window.outputparserimported = true;
 }

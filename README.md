@@ -19,9 +19,17 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
     ```
 
 ### HTML usage
-1. data as an attribute
+1. import and use all in one
     ```html
-    <teeby-deeby headers="a,b,c" data="[[1,2,3],[4,5,6],[7,8,9]]"></teeby-deeby>
+    <script src="http://localhost/tbdb.js">[
+        {"name": "Fred", "age": 23, "height": "5'10\""},
+        {"name": "Sally", "age": 25, "height": "5'6\""},
+        {"name": "Bob", "age": 27, "height": "6'0\""}
+    ]</script>
+    ```
+1. data as innerHTML
+    ```html
+    <teeby-deeby headers="a,b,c">[[1,2,3],[4,5,6],[7,8,9]]</teeby-deeby>
     ```
 2... And many more ways to pass in data! (see below)
 
@@ -45,6 +53,7 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
     * NOTE: requires `lz-string` package from `<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>`
   - [x] base64 encoded string
   - [x] drag and drop file upload
+  - [x] use script tag as teeby-deeby element
   - [ ] copy and paste
 - [x] Add styling options
   - [x] width

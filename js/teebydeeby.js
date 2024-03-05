@@ -1,3 +1,5 @@
+if (!window.teebydeebyimported) {
+
 class TeebyDeeby extends HTMLElement {
     constructor() {
         super();
@@ -112,6 +114,7 @@ class TeebyDeeby extends HTMLElement {
         this.pageInput.value = this._page;
         this.numPagesInput = this.querySelector('.numPages');
         this.numPagesInput.value = this._numPages;
+        this.pageInput.setAttribute('max', this.numPages);
         this.pageSizeInput = this.querySelector('.pageSize');
         this.pageSizeInput.value = this._pageSize;
 
@@ -307,6 +310,7 @@ class TeebyDeeby extends HTMLElement {
         value = parseInt(value);
         this._page = value;
         this.pageInput.value = value;
+        this.setAttribute('page', value);
         this.rePage();
     }
     set pageSize(value){
@@ -314,6 +318,9 @@ class TeebyDeeby extends HTMLElement {
         this._pageSize = value;
         this.pageSizeInput.value = value;
         this.numPagesInput.value = this.numPages;
+        this.setAttribute('pagesize', value);
+        this.pageInput.setAttribute('max', this.numPages);
+        console.warn("set page size", value, this.numPages);
         this.rePage();
     }
 
@@ -667,7 +674,26 @@ class TeebyDeeby extends HTMLElement {
         }
         // if table height is greater than window height, add scroll class
         if (this.table.offsetHeight > window.innerHeight) {
-            this.classList.add('scroll');
+            // set pagination to a number which makes the table height less than 90vh
+            let h = window.innerHeight * 0.9;
+            let top = this.table.getBoundingClientRect().top;
+            let maxBottom = top + h;
+            let n = 0;
+            let row;
+            while (true) {
+                // get
+                n += 1;
+                row = this.tbody.children[n];
+                if (row.getBoundingClientRect().bottom > maxBottom) {
+                    n -= 1;
+                    break;
+                }
+            }
+            this.pageSize = Math.max(5, 5 * Math.floor(n / 5));
+            if (!this.page){
+                this.page = 1;
+            }
+
         }
         console.log("set content", this.classList, this.classList.contains('scroll'));
         if (this.classList.contains('scroll')){
@@ -732,9 +758,6 @@ class TeebyDeeby extends HTMLElement {
       }
     }
 
-
-
-
     // getters
     get headers() {
         return this._headers;
@@ -752,3 +775,42 @@ class TeebyDeeby extends HTMLElement {
 
 
 customElements.define('teeby-deeby', TeebyDeeby);
+
+class TbDb extends TeebyDeeby {
+    constructor() {
+        super();
+    }
+}
+customElements.define('tb-db', TbDb);
+
+window.TeebyDeeby = TeebyDeeby;
+window.TbDb = TbDb;
+
+
+// if this script has any attributes other than src, or if it has innerHTML, convert to teeby-deeby element
+// get the script tag this page was loaded from
+let script = document.currentScript;
+if (script){
+    let attrs = Array.from(script.attributes).map(x => x.name).filter(x => x !== 'src');
+    if (attrs.length || script.innerHTML.trim()){
+        let tbdb = document.createElement('teeby-deeby');
+        for (let attr of attrs){
+            tbdb.setAttribute(attr, script.getAttribute(attr));
+        }
+        tbdb.innerHTML = script.innerHTML;
+
+        // if script is in the body, replace it with tbdb
+        // if script is in the head, append tbdb to the body and remove innerHTML from script
+        let head = document.head || document.getElementsByTagName('head')[0];
+        let body = document.body || document.getElementsByTagName('body')[0];
+        if (script.parentElement === head){
+            body.appendChild(tbdb);
+            script.innerHTML = '';
+        }else{
+            script.replaceWith(tbdb);
+        }
+    }
+}
+
+window.teebydeebyimported = true;
+}

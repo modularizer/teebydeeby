@@ -5,7 +5,7 @@ npx postcss css/*.css -o teebydeeby.min.css --use cssnano
 
 
 # Combine and minify JS
-cat js/*.js | uglifyjs -o teebydeeby.min.js
+uglifyjs js/loadcss.js js/InputParser.js js/OutputParser.js js/teebydeeby.js -o tbdb.js
 
 # Preprocess CSS content to make it safe for sed replacement
 CSS_CONTENT=$(awk '{printf "%s\\n", $0}' teebydeeby.min.css | sed -e 's/[\/&]/\\&/g')
@@ -14,7 +14,7 @@ CSS_CONTENT=$(awk '{printf "%s\\n", $0}' teebydeeby.min.css | sed -e 's/[\/&]/\\
 sed -i'' -e "/%CSS%/{
     s|%CSS%||g
     r /dev/stdin
-}" teebydeeby.min.js <<<"$CSS_CONTENT"
+}" tbdb.js <<<"$CSS_CONTENT"
 
 # Optional cleanup
 rm teebydeeby.min.css
