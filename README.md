@@ -107,7 +107,10 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
 ## Contributing
 Please! I probably don't have time to see this project through, so it you want to work on it, reach out!
 modularizer@gmail.com
-    
+
+* install node and npm
+  * https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+* run `install.sh` to install the necessary packages and setup pre-commit hooks
 
 ## Features
 ## Parameter Specifications
