@@ -14,7 +14,7 @@ if (!window.celltypeimported){
         "percent": v => v.endsWith("%") && !isNaN(v.slice(0, -1)),
         "number": v => !isNaN(v),
         "date": v => !isNaN(new Date(v)),
-        "time": v => new Date("1970-01-01T" + v) instanceof Date,
+        "time": v => !isNaN(new Date("1970-01-01T" + v)),
         "string": v => typeof v === "string"
     }
 
