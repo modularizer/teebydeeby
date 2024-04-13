@@ -1,6 +1,7 @@
 if (!window.celltypeimported){
 
     window.celltypes = {
+        "undefined": v => v === undefined,
         "array": v => v instanceof Array || (typeof v === "string" && v.startsWith("[") && v.endsWith("]")),
         "object": v => v instanceof Object || (typeof v === "string" && v.startsWith("{") && v.endsWith("}")),
         "boolean": v => [true, false, "true", "false", "True", "False"].includes(v),
@@ -44,7 +45,9 @@ function setCellValue(cell, value, editable=false, preferences=[]){
     }
     cell.classList.add(t);
 
-    if (t === "boolean"){
+    if (t === "undefined"){
+        cell.innerHTML = "";
+    }else if (t === "boolean"){
         let checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.checked = value;
