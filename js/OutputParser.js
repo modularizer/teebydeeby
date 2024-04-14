@@ -6,7 +6,6 @@ class OutputParser {
     constructor(tbdb){
         this.tbdb = tbdb;
         this.getColumn = this.getColumn.bind(this);
-
     }
 
     getColumn(which){
@@ -57,6 +56,12 @@ class OutputParser {
     }
 
     get url() {
+        let u = new URL(window.location.href);
+        u.search = new URLSearchParams({u: new URLSearchParams({data: btoa(JSON.stringify(this.data))}).toString()}).toString();
+        return u.toString();
+    }
+
+    get lzurl() {
         let u = new URL(window.location.href);
         u.search = new URLSearchParams({data: this.lzdata}).toString();
         return u.toString();

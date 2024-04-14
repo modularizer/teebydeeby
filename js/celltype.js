@@ -19,73 +19,73 @@ if (!window.celltypeimported){
         "string": v => typeof v === "string"
     }
 
-function detectCellType(value){
-    let matchedTypes = [];
-    for (let t in window.celltypes){
-        try{
-            if (window.celltypes[t](value)){
-                matchedTypes.push(t);
+    function detectCellType(value){
+        let matchedTypes = [];
+        for (let t in window.celltypes){
+            try{
+                if (window.celltypes[t](value)){
+                    matchedTypes.push(t);
+                }
+            }catch(e){
             }
-        }catch(e){
+        }
+        return matchedTypes;
+    }
+
+    function setCellValue(cell, value, editable=false, preferences=[]){
+        let matchedTypes = detectCellType(value);
+        let existingTypes = matchedTypes.filter(t => cell.classList.contains(t));
+        let preferredTypes = preferences.filter(t => matchedTypes.includes(t));
+        let t = existingTypes.length > 0 ? existingTypes[0] : (preferredTypes.length > 0 ? preferredTypes[0] : matchedTypes[0])
+
+        for (let ty of Object.keys(window.celltypes)){
+            if (ty !== t){
+                cell.classList.remove(ty);
+            }
+        }
+        cell.classList.add(t);
+
+        if (t === "undefined"){
+            cell.innerHTML = "";
+        }else if (t === "boolean"){
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = value;
+            cell.appendChild(checkbox);
+            if (!editable){
+                checkbox.setAttribute('disabled', true);
+            }
+        }else if (t === "number"){
+            cell.innerHTML = value;
+        }else if (t === "date"){
+            let date = document.createElement('input');
+            date.type = 'date';
+            date.value = value;
+            cell.appendChild(date);
+            if (!editable){
+                date.setAttribute('disabled', true);
+            }
+        }else if (t === "time"){
+            let time = document.createElement('input');
+            time.type = 'time';
+            time.value = value;
+            cell.appendChild(time);
+            if (!editable){
+                time.setAttribute('disabled', true);
+            }
+        }else if (t === "image"){
+            let img = document.createElement('img');
+            img.src = value;
+            cell.appendChild(img);
+        }else if (t === "url"){
+            let link = document.createElement('a');
+            link.href = value;
+            link.innerHTML = value;
+            cell.appendChild(link);
+        } else{
+            cell.innerHTML = value;
         }
     }
-    return matchedTypes;
-}
-
-function setCellValue(cell, value, editable=false, preferences=[]){
-    let matchedTypes = detectCellType(value);
-    let existingTypes = matchedTypes.filter(t => cell.classList.contains(t));
-    let preferredTypes = preferences.filter(t => matchedTypes.includes(t));
-    let t = existingTypes.length > 0 ? existingTypes[0] : (preferredTypes.length > 0 ? preferredTypes[0] : matchedTypes[0])
-
-    for (let ty of Object.keys(window.celltypes)){
-        if (ty !== t){
-            cell.classList.remove(ty);
-        }
-    }
-    cell.classList.add(t);
-
-    if (t === "undefined"){
-        cell.innerHTML = "";
-    }else if (t === "boolean"){
-        let checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = value;
-        cell.appendChild(checkbox);
-        if (!editable){
-            checkbox.setAttribute('disabled', true);
-        }
-    }else if (t === "number"){
-        cell.innerHTML = value;
-    }else if (t === "date"){
-        let date = document.createElement('input');
-        date.type = 'date';
-        date.value = value;
-        cell.appendChild(date);
-        if (!editable){
-            date.setAttribute('disabled', true);
-        }
-    }else if (t === "time"){
-        let time = document.createElement('input');
-        time.type = 'time';
-        time.value = value;
-        cell.appendChild(time);
-        if (!editable){
-            time.setAttribute('disabled', true);
-        }
-    }else if (t === "image"){
-        let img = document.createElement('img');
-        img.src = value;
-        cell.appendChild(img);
-    }else if (t === "url"){
-        let link = document.createElement('a');
-        link.href = value;
-        link.innerHTML = value;
-        cell.appendChild(link);
-    } else{
-        cell.innerHTML = value;
-    }
-}
 
 
 

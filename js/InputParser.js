@@ -96,7 +96,6 @@ class InputParser {
         }
         headers = this.parse(headers);
         data = this.parse(data);
-        console.log("setData", headers, data);
         if (headers && headers.length > 0) {
             if (this.isDict(data)) {
                 return this.fromHeadersAndDict(headers, data);
@@ -124,10 +123,8 @@ class InputParser {
         }
         return [headers, data];
     }
-
     fromString(data) {
         data = this.parseString(data);
-        console.log("fromString", data)
         if (this.testString(data)) {
             if ((data.startsWith('[') && data.endsWith(']')) || (data.startsWith('{') && data.endsWith('}'))) {
                 return this.fromJSON(data);
@@ -142,7 +139,6 @@ class InputParser {
             throw new Error("unable to interpret string")
         }
     }
-
     fromJSON(json) {
         return this.fromData(undefined, json);
     }

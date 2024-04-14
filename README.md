@@ -17,6 +17,12 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
     ```html
     <iframe src="https://modularizer.github.io/teebydeeby/?headers=a,b,c&data=[[1,2,3],[4,5,6],[7,8,9]]"></iframe>
     ```
+   ```html
+    <iframe src='https://modularizer.github.io/teebydeeby/?data=[{"a":1,"b":2,"c": 3},{"a":4,"b":5,"c":6}]'></iframe>
+    ```
+   ```html
+    <iframe src='https://modularizer.github.io/teebydeeby/?data={"a":[4,7],"b":[5,8],"c":[6,9]}'></iframe>
+    ```
 
 ### HTML usage
 1. import and use all in one
@@ -55,6 +61,7 @@ Tabular Database ... TeebyDeeby ... TbdB ... Teeby ... Tb
   - [x] drag and drop file upload
   - [x] use script tag as teeby-deeby element
   - [ ] copy and paste
+  - [ ] set attribute through javascript
 - [x] Add styling options
   - [x] width
   - [x] height
