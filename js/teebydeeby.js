@@ -307,7 +307,6 @@ class TeebyDeeby extends HTMLElement {
         }
         let th = this.thead.children[colInd];
         let oldDir = parseInt(th.getAttribute('dir') || '0');
-        console.log(th, oldDir, dir);
         if (oldDir === dir){
             return
         }
@@ -359,6 +358,7 @@ class TeebyDeeby extends HTMLElement {
             this.tbody.appendChild(oldRows[row.index]);
         }
         this._data = newData;
+        this._rePage();
 
     }
     setPageSize(value){
@@ -698,11 +698,9 @@ class TeebyDeeby extends HTMLElement {
         let colInd = Array.from(th.parentElement.children).indexOf(th);
         console.log("colInd", colInd);
         if (th.classList.contains('up')){
-            this.sort(colInd, 0);
-        }else if (th.classList.contains('down')){
-            this.sort(colInd, 1);
-        }else{
             this.sort(colInd, -1);
+        }else {
+            this.sort(colInd, 1);
         }
     }
     _resizeThead() {
